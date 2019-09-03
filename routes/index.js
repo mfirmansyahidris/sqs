@@ -1,10 +1,14 @@
 module.exports = function(app){
-    var controller = require('../controllers/index')
-    var users = require('../controllers/users')
+    const controller = require('../controllers/index')
+    const users = require('../controllers/users')
+    const login = require('../controllers/login')
+    const middleware = require('../middleware/jwtAuthorizer')
 
     app.route('/')
         .get(controller.index)
     
-    app.route('/users')
-        .get(users.index)
+    app.get('/users', middleware, users.index)
+
+    app.route('/login')
+        .get(login.index)
 }

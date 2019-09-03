@@ -5,9 +5,13 @@ exports.index = function(req, res){
     connection.query('SELECT * FROM users', function (error, rows, fields){
         if(error){
             console.log(error)
-            response.failed(error, res)
+            response.failed({
+                'message' : error    
+            }, res)
         }else{
-            response.ok(rows, res)
+            response.ok({
+                'users' : rows
+            }, res)
         }
     })
 }
