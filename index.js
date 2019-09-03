@@ -1,7 +1,3 @@
-const dotenv = require('dotenv')
-dotenv.config()
-const port = process.env.SERVER_PORT
-
 const express = require('express')
 const app = express()
 
@@ -14,5 +10,5 @@ app.use(bodyparser.json())
 var routes = require('../sqs/routes/index')
 routes(app)
 
-app.listen(port)
-console.log(`sqs run in port ${port}`)
+app.listen(3000)
+console.log(`sqs run in port 3000`)

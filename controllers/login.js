@@ -1,5 +1,4 @@
 var response = require('../res/index')
-var connection = require('../connection/index')
 var jwt = require('jsonwebtoken')
 var fs = require('fs') 
 
