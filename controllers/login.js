@@ -1,25 +1,22 @@
-var response = require('../res/index')
-var jwt = require('jsonwebtoken')
-var fs = require('fs') 
+const response = require('../res/index')
+const jwt = require('jsonwebtoken')
+const fs = require('fs')
+const user = require('../models').User
 
 exports.index = function(req, res){
     console.log(req.body)
-    connection.query(`SELECT * FROM users WHERE id = '${req.body.id}'`, function (error, rows, fields){
-        if(error){
-            console.log(error)
-            response.failed(error, res)
+    user.findAll({
+        where: {id: req.body.id},
+    }).then(user => {
+        if(user.length > 0){
+            let privateKey = fs.readFileSync('./private.pem', 'utf8')
+            let token = jwt.sign({ "body": "stuff" }, privateKey, { algorithm: 'HS256'})
+            response.ok({
+                'user' : user[0],
+                'token' : `jwt ${token}`
+            }, res)
         }else{
-            if(rows.length < 1){
-                response.notfound("id or password incorrect", res)
-            }else{
-                let privateKey = fs.readFileSync('./private.pem', 'utf8')
-                let token = jwt.sign({ "body": "stuff" }, privateKey, { algorithm: 'HS256'})
-
-                response.ok({
-                    'user' : rows[0],
-                    'token' : `jwt ${token}`
-                }, res)
-            }
+            response.notfound("id or password incorrect", res)
         }
     })
 }
